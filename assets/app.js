@@ -52,6 +52,27 @@
   }
 })();
 
+// ── THEME ────────────────────────────────────────────────────────────────────
+(function () {
+  const btn  = document.getElementById('theme-toggle');
+  const sun  = document.getElementById('theme-icon-sun');
+  const moon = document.getElementById('theme-icon-moon');
+  if (!btn) return;
+
+  function setTheme(light) {
+    document.body.classList.toggle('light', light);
+    sun.style.display  = light ? 'none'  : '';
+    moon.style.display = light ? ''      : 'none';
+    localStorage.setItem('theme', light ? 'light' : 'dark');
+  }
+
+  setTheme(localStorage.getItem('theme') === 'light');
+
+  btn.addEventListener('click', () => {
+    setTheme(!document.body.classList.contains('light'));
+  });
+})();
+
 // ── SIDEBAR TREE ─────────────────────────────────────────────────────────────
 (function () {
   const treeData    = window.TREE_DATA    || { children: {}, roots: [] };
