@@ -7,29 +7,7 @@
 require_once __DIR__ . '/../render.php';
 ?>
 <section id="content">
-  <?php if (!$currentClass): ?>
-
-    <?php if (empty($classes)): ?>
-      <div class="empty-state">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="1" color="#6e6e96">
-          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-        </svg>
-        No classes found. Check <b>headers_dir</b> in <b>config.php</b> <br> <br>to ensure your methods' header files path is set correctly.
-      </div>
-    <?php else: ?>
-      <div class="empty-state">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="1" color="#6e6e96">
-          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-          <path d="M2 17l10 5 10-5"/>
-          <path d="M2 12l10 5 10-5"/>
-        </svg>
-        Select a class from the sidebar to explore its API.
-      </div>
-    <?php endif; ?>
-
-  <?php elseif ($selectedMethod && isset($allMethods[$selectedMethod])): ?>
+  <?php if ($selectedMethod && isset($allMethods[$selectedMethod])): ?>
 
     <?php $m = $allMethods[$selectedMethod]; ?>
     <div class="breadcrumb">
@@ -38,7 +16,7 @@ require_once __DIR__ . '/../render.php';
     </div>
     <?= render_method_card($selectedMethod, $m, false, $selectedClass, $classes) ?>
 
-  <?php else: ?>
+  <?php elseif ($currentClass): ?>
 
     <h1><?= htmlspecialchars($selectedClass) ?></h1>
 
@@ -71,6 +49,29 @@ require_once __DIR__ . '/../render.php';
     <?php foreach ($allMethods as $mn => $m): ?>
       <?= render_method_card($mn, $m, true, $selectedClass, $classes) ?>
     <?php endforeach; ?>
+
+  <?php elseif (empty($classes)): ?>
+
+    <div class="empty-state">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="1" color="#6e6e96">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      No classes found. The configured <b>headers_dir</b> contains no <b>.h</b> files.<br><br>
+      <a href="?reconfigure=1" class="btn" style="display:inline-flex;text-decoration:none;margin-top:10px;">Change Configuration</a>
+    </div>
+
+  <?php else: ?>
+
+    <div class="empty-state">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="1" color="#6e6e96">
+        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+        <path d="M2 17l10 5 10-5"/>
+        <path d="M2 12l10 5 10-5"/>
+      </svg>
+      Select a class from the sidebar to explore its API.
+    </div>
 
   <?php endif; ?>
 </section>
