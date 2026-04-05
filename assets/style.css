@@ -122,8 +122,8 @@ body.light .proto-badge { background: #d4f0e8; }
 body.light .tag-type { background: #dceeff; }
 .tag-name    { color: var(--green);  font-family: monospace; flex-shrink: 0; }
 .tag-default { color: var(--orange); font-family: monospace; font-size: 12px; flex-shrink: 0; }
-.tag-row { display: flex; gap: 10px; align-items: baseline; margin-bottom: 5px; font-size: 13px; flex-wrap: wrap; }
-.tag-desc    { color: var(--muted); min-width: 0; flex: 1; }
+.tag-row { display: flex; column-gap: 10px; row-gap: 5px; align-items: baseline; margin-bottom: 5px; font-size: 13px; flex-wrap: wrap; }
+.tag-desc { color: var(--muted); min-width: min-content; flex: 1; }
 
 /* ── DOC LINKS ── */
 a.doc-link { color: var(--purple3); text-decoration: none; border-bottom: 1px dotted var(--purple2); transition: color .15s, border-color .15s; }
@@ -185,4 +185,8 @@ pre.code-block code { font-family: 'Consolas', 'Fira Code', monospace; font-size
   #sidebar-overlay { display: none; position: fixed; inset: 0; top: 52px; background: #0006; z-index: 49; }
   #sidebar-overlay.open { display: block; }
   #hamburger { display: flex; align-items: center; }
+}
+
+@media (max-width: 500px) {
+  #logo span { display: none; }
 }

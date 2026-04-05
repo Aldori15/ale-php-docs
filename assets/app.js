@@ -127,3 +127,19 @@
     overlay.classList.remove('open');
   });
 })();
+
+// ── TAG ROW WRAP MARGIN ───────────────────────────────────────────────────────
+(function () {
+  function updateTagDescMargins() {
+    document.querySelectorAll('.tag-row').forEach(row => {
+      const desc = row.querySelector('.tag-desc');
+      if (!desc) return;
+      const firstChild = row.firstElementChild;
+      const wrapped = desc.offsetTop > firstChild.offsetTop;
+      desc.style.marginBottom = wrapped ? '10px' : '';
+    });
+  }
+
+  updateTagDescMargins();
+  window.addEventListener('resize', updateTagDescMargins);
+})();

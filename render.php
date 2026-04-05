@@ -240,17 +240,17 @@ function render_method_card(string $mn, array $m, bool $linkName = false, string
 function render_tag_row(array $tag, array $classes = []): string {
     $html = '<div class="tag-row">';
     if ($tag['type']) {
-        $html .= '<span class="tag-type">' . render_links(htmlspecialchars($tag['type']), $classes) . '</span>';
+        $html .= '<div class="tag-type">' . render_links(htmlspecialchars($tag['type']), $classes) . '</div>';
     }
     if ($tag['name']) {
-        $html .= '<span class="tag-name">' . htmlspecialchars($tag['name']) . '</span>';
+        $html .= '<div class="tag-name">' . htmlspecialchars($tag['name']) . '</div>';
     }
     if ($tag['default'] !== '') {
-        $html .= '<span class="tag-default">default: ' . htmlspecialchars($tag['default']) . '</span>';
+        $html .= '<div class="tag-default">default: ' . htmlspecialchars($tag['default']) . '</div>';
     }
     if ($tag['desc']) {
         $desc = str_replace('&lt;br&gt;', '<br>', htmlspecialchars($tag['desc']));
-        $html .= '<span class="tag-desc">' . render_links($desc, $classes) . '</span>';
+        $html .= '<div class="tag-desc">' . render_links($desc, $classes) . '</div>';
     }
     $html .= '</div>';
     return $html;
