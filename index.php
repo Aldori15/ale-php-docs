@@ -43,9 +43,9 @@ $title = $config['site_title'];
   <?php include __DIR__ . '/partials/topbar.php'; ?>
   <?php include __DIR__ . '/partials/sidebar.php'; ?>
   <main id="main">
-    <?php include __DIR__ . '/partials/method_list.php'; ?>
     <?php include __DIR__ . '/partials/content.php'; ?>
   </main>
+  <div id="sidebar-overlay"></div>
 </div>
 <script src="assets/app.js"></script>
 </body>

@@ -14,7 +14,7 @@
       x.name.toLowerCase().includes(q) ||
       (x.desc  && x.desc.toLowerCase().includes(q)) ||
       (x.class && x.class.toLowerCase().includes(q))
-    ).slice(0, 30);
+    );
 
     if (!hits.length) { closeSearch(); return; }
 
@@ -87,4 +87,22 @@
   }
 
   container.innerHTML = html;
+})();
+
+// ── HAMBURGER ────────────────────────────────────────────────────────────────
+(function () {
+  const btn     = document.getElementById('hamburger');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  if (!btn || !sidebar) return;
+
+  btn.addEventListener('click', () => {
+    sidebar.classList.toggle('open');
+    overlay && overlay.classList.toggle('open');
+  });
+
+  overlay && overlay.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('open');
+  });
 })();

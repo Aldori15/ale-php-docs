@@ -4,8 +4,13 @@
 /** @var array  $tree */
 ?>
 <aside id="sidebar">
-  <div id="sidebar-header">Classes</div>
-  <div id="sidebar-tree"></div>
+  <div id="class-panel">
+    <div id="sidebar-header">Classes</div>
+    <div id="sidebar-tree"></div>
+  </div>
+  <div id="method-panel">
+    <?php include __DIR__ . '/method_list.php'; ?>
+  </div>
 </aside>
 
 <script>

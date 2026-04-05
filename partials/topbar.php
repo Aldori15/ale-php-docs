@@ -3,6 +3,11 @@
 /** @var array  $searchIndex */
 ?>
 <header id="topbar">
+  <button id="hamburger" aria-label="Toggle sidebar">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
   <a id="logo" href="?">
     <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="18" cy="18" r="18" fill="#6b21d6"/>
