@@ -3,6 +3,39 @@ define('STATIC_BUILD', true);
 define('CONFIG_FILE',  __DIR__ . '/config.php');
 define('SOURCE_DIR',   __DIR__ . '/source');
 
+$sources = [
+    'mod-ale' => [
+        'url'         => 'https://github.com/azerothcore/mod-ale/archive/refs/heads/master.zip',
+        'title'       => 'mod-ale API',
+        'headers_dir' => 'source/mod-ale/src/LuaEngine/methods',
+    ],
+    'ElunaTrinityCore' => [
+        'url'         => 'https://github.com/ElunaLuaEngine/Eluna/archive/refs/heads/master.zip',
+        'title'       => 'Eluna TrinityCore API',
+        'headers_dir' => 'source/Eluna/methods/TrinityCore',
+    ],
+    'ElunaAzerothCore' => [
+        'url'         => 'https://github.com/ElunaLuaEngine/Eluna/archive/refs/heads/master.zip',
+        'title'       => 'Eluna AzerothCore API',
+        'headers_dir' => 'source/Eluna/methods/AzerothCore',
+    ],
+    'ElunaCMangos' => [
+        'url'         => 'https://github.com/ElunaLuaEngine/Eluna/archive/refs/heads/master.zip',
+        'title'       => 'Eluna cMaNGOS API',
+        'headers_dir' => 'source/Eluna/methods/CMaNGOS-Classic',
+    ],
+    'ElunaMangos' => [
+        'url'         => 'https://github.com/ElunaLuaEngine/Eluna/archive/refs/heads/master.zip',
+        'title'       => 'Eluna MaNGOS API',
+        'headers_dir' => 'source/Eluna/methods/MaNGOS',
+    ],
+    'ElunaVMangos' => [
+        'url'         => 'https://github.com/ElunaLuaEngine/Eluna/archive/refs/heads/master.zip',
+        'title'       => 'Eluna vMaNGOS API',
+        'headers_dir' => 'source/Eluna/methods/VMaNGOS',
+    ],
+];
+
 $repo       = getenv('GITHUB_REPOSITORY') ?: '';
 $repoName   = $repo ? explode('/', $repo)[1] : '';
 $branchName = getenv('BRANCH_NAME') ?: '';
@@ -15,24 +48,29 @@ $distDir = __DIR__ . '/dist';
 @mkdir($distDir . '/assets', 0777, true);
 
 if ($isIndex) {
-    build_index_page($repo, $repoName, $distDir);
+    build_index_page($repoName, $distDir, $sources);
     exit;
 }
 
-$config = file_exists(CONFIG_FILE) ? require CONFIG_FILE : [];
-
-if (empty($config['headers_dir'])) {
-    echo "No headers_dir in config.php\n";
+if (!isset($sources[$branchName])) {
+    echo "No source mapping for: {$branchName}\n";
     exit(1);
 }
 
 require_once __DIR__ . '/parse.php';
 require_once __DIR__ . '/render.php';
 
+$config = [
+    'headers_dir' => __DIR__ . '/' . $sources[$branchName]['headers_dir'],
+    'site_title'  => $sources[$branchName]['title'],
+    'setConf'     => 1,
+    'refetch'     => ['enabled' => false, 'interval_unit' => 'days', 'interval_value' => 1, 'last_fetched' => 0, 'zip_url' => '', 'dest_key' => ''],
+];
+
 $classes     = parse_headers($config['headers_dir']);
 $tree        = build_tree($classes);
 $searchIndex = build_search_index($classes);
-$title       = $config['site_title'] ?? 'Eluna / ALE API';
+$title       = $config['site_title'];
 
 function rewrite_links(string $html): string {
     $base = BASE_PATH;
@@ -146,26 +184,11 @@ copy(__DIR__ . '/assets/app.js',    $distDir . '/assets/app.js');
 
 echo 'Done. ' . count($classes) . " classes written to dist/\n";
 
-function build_index_page(string $repo, string $repoName, string $distDir): void {
-    $apiUrl = "https://api.github.com/repos/{$repo}/branches";
-    $ch     = curl_init($apiUrl);
-    curl_setopt_array($ch, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_USERAGENT      => 'ElunaAPIDocs/1.0',
-        CURLOPT_HTTPHEADER     => ['Accept: application/vnd.github+json'],
-    ]);
-    $json     = curl_exec($ch);
-    curl_close($ch);
-    $branches = json_decode($json, true) ?: [];
-    $branches = array_values(array_filter(
-        array_column($branches, 'name'),
-        fn($b) => $b !== 'main' && $b !== 'web'
-    ));
-
+function build_index_page(string $repoName, string $distDir, array $sources): void {
     $cards = '';
-    foreach ($branches as $branch) {
-        $url   = '/' . $repoName . '/' . htmlspecialchars($branch) . '/';
-        $label = htmlspecialchars($branch);
+    foreach (array_keys($sources) as $key) {
+        $url   = '/' . $repoName . '/' . htmlspecialchars($key) . '/';
+        $label = htmlspecialchars($key);
         $cards .= <<<HTML
       <a class="branch-card" href="{$url}">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
@@ -212,5 +235,5 @@ HTML;
 HTML;
 
     file_put_contents($distDir . '/index.html', $html);
-    echo 'Done. Index page written with ' . count($branches) . " branches.\n";
+    echo 'Done. Index page written with ' . count($sources) . " branches.\n";
 }

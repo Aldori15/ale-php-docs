@@ -5,17 +5,35 @@ on:
     - cron: '0 3 * * *'
   workflow_dispatch:
   push:
-    branches-ignore:
-      - web
+    branches:
       - main
 
 jobs:
   build-branch:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - key: mod-ale
+            url: https://github.com/azerothcore/mod-ale/archive/refs/heads/master.zip
+            dest: source/mod-ale
+          - key: ElunaTrinityCore
+            url: https://github.com/ElunaLuaEngine/Eluna/archive/refs/heads/master.zip
+            dest: source/Eluna
+          - key: ElunaAzerothCore
+            url: https://github.com/ElunaLuaEngine/Eluna/archive/refs/heads/master.zip
+            dest: source/Eluna
+          - key: ElunaCMangos
+            url: https://github.com/ElunaLuaEngine/Eluna/archive/refs/heads/master.zip
+            dest: source/Eluna
+          - key: ElunaMangos
+            url: https://github.com/ElunaLuaEngine/Eluna/archive/refs/heads/master.zip
+            dest: source/Eluna
+          - key: ElunaVMangos
+            url: https://github.com/ElunaLuaEngine/Eluna/archive/refs/heads/master.zip
+            dest: source/Eluna
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Install PHP
         uses: shivammathur/setup-php@v2
@@ -23,28 +41,20 @@ jobs:
           php-version: '8.2'
           extensions: zip, curl
 
-      - name: Clone source for mod-ale
-        if: github.ref_name == 'mod-ale'
+      - name: Download and extract source
         run: |
-          rm -rf source/mod-ale
-          git clone --depth=1 https://github.com/azerothcore/mod-ale.git source/mod-ale
+          mkdir -p ${{ matrix.dest }}
+          curl -sL ${{ matrix.url }} -o source.zip
+          unzip -q source.zip -d _extracted
+          extracted=$(find _extracted -mindepth 1 -maxdepth 1 -type d | head -1)
+          cp -r "$extracted/." ${{ matrix.dest }}/
+          rm -rf _extracted source.zip
 
-      - name: Clone source for Eluna branches
-        if: >
-          github.ref_name == 'ElunaTrinityCore' ||
-          github.ref_name == 'ElunaAzerothCore' ||
-          github.ref_name == 'ElunaCMangos' ||
-          github.ref_name == 'ElunaMangos' ||
-          github.ref_name == 'ElunaVMangos'
-        run: |
-          rm -rf source/Eluna
-          git clone --depth=1 https://github.com/ElunaLuaEngine/Eluna.git source/Eluna
-
-      - name: Generate branch site
+      - name: Generate static site
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
-          BRANCH_NAME: ${{ github.ref_name }}
-        run: php generate.php
+          BRANCH_NAME: ${{ matrix.key }}
+        run: php generate_github_docs.php
 
       - name: Deploy branch site
         uses: peaceiris/actions-gh-pages@v4
@@ -52,7 +62,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
           publish_branch: web
-          destination_dir: ${{ github.ref_name }}
+          destination_dir: ${{ matrix.key }}
           keep_files: true
 
   build-index:
@@ -60,8 +70,6 @@ jobs:
     needs: build-branch
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Install PHP
         uses: shivammathur/setup-php@v2
@@ -73,7 +81,7 @@ jobs:
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
           BRANCH_NAME: __index__
-        run: php generate.php
+        run: php generate_github_docs.php
 
       - name: Deploy root index
         uses: peaceiris/actions-gh-pages@v4
