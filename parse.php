@@ -64,6 +64,22 @@ function parse_headers(string $dir): array {
                     $returns[] = parse_tag($rm[1]);
                 } elseif (preg_match('/^@proto\s+(.+)/', $line, $prm)) {
                     $notes[] = ['kind' => 'proto', 'text' => trim($prm[1])];
+                } elseif (preg_match('/^@table$/', trim($line))) {
+                    $notes[] = ['kind' => 'table', 'columns' => [], 'rows' => []];
+                } elseif (preg_match('/^@columns\s+\[(.+)\]/', $line, $cm)) {
+                    foreach (array_reverse(array_keys($notes)) as $ni) {
+                        if ($notes[$ni]['kind'] === 'table') {
+                            $notes[$ni]['columns'] = array_map('trim', str_getcsv($cm[1]));
+                            break;
+                        }
+                    }
+                } elseif (preg_match('/^@values\s+\[(.+)\]$/', $line, $vm)) {
+                    foreach (array_reverse(array_keys($notes)) as $ni) {
+                        if ($notes[$ni]['kind'] === 'table') {
+                            $notes[$ni]['rows'][] = parse_table_values($vm[1]);
+                            break;
+                        }
+                    }
                 } elseif (preg_match('/^@/', $line)) {
                     // skip unknown tags
                 } else {
@@ -167,6 +183,36 @@ function parse_headers(string $dir): array {
     $classes = array_filter($classes, fn($c) => !empty($c['methods']));
     ksort($classes);
     return $classes;
+}
+
+function parse_table_values(string $raw): array {
+    $values = [];
+    $raw    = trim($raw);
+    $len    = strlen($raw);
+    $i      = 0;
+    while ($i < $len) {
+        while ($i < $len && $raw[$i] === ' ') $i++;
+        if ($i >= $len) break;
+        if ($raw[$i] === '"') {
+            $i++;
+            $val = '';
+            while ($i < $len && $raw[$i] !== '"') $val .= $raw[$i++];
+            $i++;
+        } elseif ($raw[$i] === '<') {
+            $val = '<';
+            $i++;
+            while ($i < $len && $raw[$i] !== '>') $val .= $raw[$i++];
+            $val .= '>';
+            $i++;
+        } else {
+            $val = '';
+            while ($i < $len && $raw[$i] !== ',') $val .= $raw[$i++];
+            $val = trim($val);
+        }
+        $values[] = $val;
+        while ($i < $len && ($raw[$i] === ',' || $raw[$i] === ' ')) $i++;
+    }
+    return $values;
 }
 
 function parse_tag(string $raw): array {

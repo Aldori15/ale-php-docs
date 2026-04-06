@@ -137,6 +137,27 @@ function render_pre_block(string $inner, array $classes = []): string {
     return $html;
 }
 
+function render_table_note(array $note, array $classes = []): string {
+    if (empty($note['columns']) && empty($note['rows'])) return '';
+    $html  = '<div class="pre-block">';
+    $html .= '<table class="enum-table"><thead><tr>';
+    foreach ($note['columns'] as $col) {
+        $html .= '<th>' . htmlspecialchars($col) . '</th>';
+    }
+    $html .= '</tr></thead><tbody>';
+    foreach ($note['rows'] as $row) {
+        $html .= '<tr>';
+        $colCount = count($note['columns']);
+        for ($i = 0; $i < $colCount; $i++) {
+            $cell = $row[$i] ?? '';
+            $html .= '<td class="enum-desc">' . render_links(htmlspecialchars(trim($cell, '<>')), $classes) . '</td>';
+        }
+        $html .= '</tr>';
+    }
+    $html .= '</tbody></table></div>';
+    return $html;
+}
+
 function render_synopsis(string $mn, array $m, string $selectedClass): string {
     $isGlobal = $selectedClass === 'GlobalFunctions';
 
@@ -213,6 +234,12 @@ function render_method_card(string $mn, array $m, bool $linkName = false, string
 
     if (!empty($m['desc'])) {
         $html .= render_desc($m['desc'], $classes);
+    }
+
+    foreach ($m['notes'] as $note) {
+        if ($note['kind'] === 'table') {
+            $html .= render_table_note($note, $classes);
+        }
     }
 
     $html .= render_synopsis($mn, $m, $selectedClass);
