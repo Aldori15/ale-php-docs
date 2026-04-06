@@ -64,6 +64,7 @@ function render_full_page(string $title, string $selectedClass, string $selected
     $currentClass = $classes[$selectedClass] ?? null;
     $allMethods   = $currentClass ? get_all_methods($selectedClass, $classes) : [];
     $base         = BASE_PATH;
+    $baseJson     = json_encode($base);
 
     ob_start();
     include __DIR__ . '/partials/topbar.php';
@@ -95,6 +96,31 @@ function render_full_page(string $title, string $selectedClass, string $selected
 </main>
 <div id="sidebar-overlay"></div>
 </div>
+<script>
+(function() {
+  const base = {$baseJson};
+  function rewrite(url) {
+    if (!url) return url;
+    url = String(url);
+    return url
+      .replace(/\?class=([^&]+)&(?:amp;)?method=([^&]+)/, function(_, c, m) {
+        return base + '/' + decodeURIComponent(c) + '/' + decodeURIComponent(m) + '/';
+      })
+      .replace(/\?class=([^&]+)/, function(_, c) {
+        return base + '/' + decodeURIComponent(c) + '/';
+      })
+      .replace(/^\?$/, base + '/');
+  }
+  document.addEventListener('click', function(e) {
+    const a = e.target.closest('a');
+    if (!a) return;
+    const href = a.getAttribute('href');
+    if (!href || !href.startsWith('?')) return;
+    e.preventDefault();
+    location.href = rewrite(href);
+  }, true);
+})();
+</script>
 <script src="{$base}/assets/app.js"></script>
 </body>
 </html>
