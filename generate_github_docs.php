@@ -21,18 +21,18 @@ $sources = [
     ],
     'ElunaCMangos' => [
         'url'         => 'https://github.com/ElunaLuaEngine/Eluna/archive/refs/heads/master.zip',
-        'title'       => 'Eluna cMaNGOS API',
-        'headers_dir' => 'source/Eluna/methods/CMaNGOS-Classic',
+        'title'       => 'Eluna CMaNGOS API',
+        'headers_dir' => 'source/Eluna/methods/CMangos',
     ],
     'ElunaMangos' => [
         'url'         => 'https://github.com/ElunaLuaEngine/Eluna/archive/refs/heads/master.zip',
         'title'       => 'Eluna MaNGOS API',
-        'headers_dir' => 'source/Eluna/methods/MaNGOS',
+        'headers_dir' => 'source/Eluna/methods/Mangos',
     ],
     'ElunaVMangos' => [
         'url'         => 'https://github.com/ElunaLuaEngine/Eluna/archive/refs/heads/master.zip',
-        'title'       => 'Eluna vMaNGOS API',
-        'headers_dir' => 'source/Eluna/methods/VMaNGOS',
+        'title'       => 'Eluna VMaNGOS API',
+        'headers_dir' => 'source/Eluna/methods/VMangos',
     ],
 ];
 
