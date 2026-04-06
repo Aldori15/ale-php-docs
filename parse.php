@@ -42,7 +42,7 @@ function parse_headers(string $dir): array {
         $body = substr($content, $nsStart + 1);
 
         $methods = [];
-        $pattern = '/\/\*\*\s*(.*?)\s*\*\/\s*int\s+(\w+)\s*\(lua_State\*/s';
+        $pattern = '/\/\*\*\s*(.*?)\s*\*\/\s*int\s+(\w+)\s*\((?:lua_State\*|Eluna\*)/s';
         preg_match_all($pattern, $body, $methodMatches, PREG_SET_ORDER);
 
         foreach ($methodMatches as $m) {
@@ -163,7 +163,8 @@ function parse_headers(string $dir): array {
             'file'     => basename($file),
         ];
     }
-
+    
+    $classes = array_filter($classes, fn($c) => !empty($c['methods']));
     ksort($classes);
     return $classes;
 }
