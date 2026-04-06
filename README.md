@@ -34,19 +34,15 @@ A plug-and-play, self-hosted PHP documentation browser for [Eluna](https://githu
 
 ## Setup
 
-1. Clone the repo into your web server's document root
+1. Clone the repo into your web server's document root.
 2. Edit `config.php` and set `headers_dir` to your Eluna/ALE methods directory. You can, for example, git clone mod-ale directly into this dir to have it work right out of the box.
-3. Done
-```php
-return [
-    'headers_dir' => __DIR__ . '/mod-ale/src/LuaEngine/methods',
-    'site_title'  => 'Eluna / ALE API',
-];
-```
+3. Done.
+
+Optionally, you may also fork this repository and set up GitHub Pages to make static HTML copies of the docs for your personal Eluna/ALE version, by editing the sources array in `generate_github_docs.php`.
 
 ---
 
 ## Roadmap
 
-- [ ] File-based caching. Parse once, serve statically instead of re-parsing on every request
-- [ ] Hashing/target dir size check to re-cache on methods dir changes 
+- [X] File-based caching. Parse once, serve statically instead of re-parsing on every request.
+- [X]  ~~Hashing/target dir size check to re-cache on methods dir changes.~~ GitHub Pages pull from sources every 24 hours, and users can optionally set up re-fetching of local source files.
