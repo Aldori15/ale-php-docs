@@ -10,6 +10,7 @@ function parse_headers(string $dir): array {
 
         $namespace = $nsMatch[1];
         $className = preg_replace('/^Lua/', '', $namespace);
+        $className = $className === 'GlobalFunctions' ? 'GlobalMethods' : $className;
 
         $classDesc = '';
         $inherits  = [];
