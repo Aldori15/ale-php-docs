@@ -70,7 +70,7 @@ require_once __DIR__ . '/../render.php';
         <path d="M2 17l10 5 10-5"/>
         <path d="M2 12l10 5 10-5"/>
       </svg>
-      Select a class from the sidebar to explore its API.
+      Select a class or method from the sidebar to explore its API.
     </div>
 
   <?php endif; ?>
