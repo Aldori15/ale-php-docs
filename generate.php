@@ -19,34 +19,20 @@ if ($isIndex) {
     exit;
 }
 
-$sourceMap = [
-    'mod-ale'          => __DIR__ . '/source/mod-ale/src/LuaEngine/methods',
-    'ElunaTrinityCore' => __DIR__ . '/source/Eluna/src/LuaEngine/methods',
-    'ElunaAzerothCore' => __DIR__ . '/source/Eluna/src/LuaEngine/methods',
-    'ElunaCMangos'     => __DIR__ . '/source/Eluna/src/LuaEngine/methods',
-    'ElunaMangos'      => __DIR__ . '/source/Eluna/src/LuaEngine/methods',
-    'ElunaVMangos'     => __DIR__ . '/source/Eluna/src/LuaEngine/methods',
-];
+$config = file_exists(CONFIG_FILE) ? require CONFIG_FILE : [];
 
-if (!isset($sourceMap[$branchName])) {
-    echo "No source mapping for branch: {$branchName}\n";
+if (empty($config['headers_dir'])) {
+    echo "No headers_dir in config.php\n";
     exit(1);
 }
 
 require_once __DIR__ . '/parse.php';
 require_once __DIR__ . '/render.php';
 
-$config = [
-    'headers_dir' => $sourceMap[$branchName],
-    'site_title'  => 'Eluna / ALE API',
-    'setConf'     => 1,
-    'refetch'     => ['enabled' => false, 'interval_unit' => 'days', 'interval_value' => 1, 'last_fetched' => 0, 'zip_url' => '', 'dest_key' => ''],
-];
-
 $classes     = parse_headers($config['headers_dir']);
 $tree        = build_tree($classes);
 $searchIndex = build_search_index($classes);
-$title       = $config['site_title'];
+$title       = $config['site_title'] ?? 'Eluna / ALE API';
 
 function rewrite_links(string $html): string {
     $base = BASE_PATH;
