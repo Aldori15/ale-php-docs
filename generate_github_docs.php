@@ -9,31 +9,6 @@ $sources = [
         'title'       => 'ALE API Documentation',
         'headers_dir' => 'source/mod-ale/src/LuaEngine/methods',
     ],
-    'ElunaTrinityCore' => [
-        'url'         => 'https://github.com/ElunaLuaEngine/Eluna/archive/refs/heads/master.zip',
-        'title'       => 'Eluna TrinityCore API',
-        'headers_dir' => 'source/Eluna/methods/TrinityCore',
-    ],
-    'ElunaAzerothCore' => [
-        'url'         => 'https://github.com/ElunaLuaEngine/Eluna/archive/refs/heads/master.zip',
-        'title'       => 'Eluna AzerothCore API',
-        'headers_dir' => 'source/Eluna/methods/AzerothCore',
-    ],
-    'ElunaCMangos' => [
-        'url'         => 'https://github.com/ElunaLuaEngine/Eluna/archive/refs/heads/master.zip',
-        'title'       => 'Eluna CMaNGOS API',
-        'headers_dir' => 'source/Eluna/methods/CMangos',
-    ],
-    'ElunaMangos' => [
-        'url'         => 'https://github.com/ElunaLuaEngine/Eluna/archive/refs/heads/master.zip',
-        'title'       => 'Eluna MaNGOS API',
-        'headers_dir' => 'source/Eluna/methods/Mangos',
-    ],
-    'ElunaVMangos' => [
-        'url'         => 'https://github.com/ElunaLuaEngine/Eluna/archive/refs/heads/master.zip',
-        'title'       => 'Eluna VMaNGOS API',
-        'headers_dir' => 'source/Eluna/methods/VMangos',
-    ],
 ];
 
 $repo       = getenv('GITHUB_REPOSITORY') ?: '';

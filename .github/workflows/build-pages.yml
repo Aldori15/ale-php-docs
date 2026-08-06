@@ -18,21 +18,6 @@ jobs:
           - key: mod-ale
             url: https://github.com/Aldori15/mod-ale/archive/refs/heads/master.zip
             dest: source/mod-ale
-          - key: ElunaTrinityCore
-            url: https://github.com/ElunaLuaEngine/Eluna/archive/refs/heads/master.zip
-            dest: source/Eluna
-          - key: ElunaAzerothCore
-            url: https://github.com/ElunaLuaEngine/Eluna/archive/refs/heads/master.zip
-            dest: source/Eluna
-          - key: ElunaCMangos
-            url: https://github.com/ElunaLuaEngine/Eluna/archive/refs/heads/master.zip
-            dest: source/Eluna
-          - key: ElunaMangos
-            url: https://github.com/ElunaLuaEngine/Eluna/archive/refs/heads/master.zip
-            dest: source/Eluna
-          - key: ElunaVMangos
-            url: https://github.com/ElunaLuaEngine/Eluna/archive/refs/heads/master.zip
-            dest: source/Eluna
     steps:
       - uses: actions/checkout@v4
 
