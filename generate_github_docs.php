@@ -5,8 +5,8 @@ define('SOURCE_DIR',   __DIR__ . '/source');
 
 $sources = [
     'mod-ale' => [
-        'url'         => 'https://github.com/azerothcore/mod-ale/archive/refs/heads/master.zip',
-        'title'       => 'mod-ale API',
+        'url'         => 'https://github.com/Aldori15/mod-ale/archive/refs/heads/master.zip',
+        'title'       => 'ALE API Documentation',
         'headers_dir' => 'source/mod-ale/src/LuaEngine/methods',
     ],
     'ElunaTrinityCore' => [
